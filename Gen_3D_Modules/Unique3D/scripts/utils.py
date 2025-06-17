@@ -22,7 +22,7 @@ providers = [
     })
 ]
 
-session = new_session(providers=providers)
+session = None
 
 NEG_PROMPT="sketch, sculpture, hand drawing, outline, single color, NSFW, lowres, bad anatomy,bad hands, text, error, missing fingers, yellow sleeves, extra digit, fewer digits, cropped, worst quality, low quality, normal quality, jpeg artifacts, signature, watermark, username, blurry,(worst quality:1.4),(low quality:1.4)"
 
@@ -309,6 +309,11 @@ def expand2square(pil_img, background_color):
 
 
 def simple_image_preprocess(input_image, rembg_session=session, background_color=255):
+    if rembg_session is None:
+        global session
+        if session is None:
+            session = new_session(providers=providers)
+        rembg_session = session
     RES = 2048
     input_image.thumbnail([RES, RES], Image.Resampling.LANCZOS)
     if input_image.mode != 'RGBA':
