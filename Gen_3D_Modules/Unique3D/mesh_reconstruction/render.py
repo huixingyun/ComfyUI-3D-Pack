@@ -12,7 +12,6 @@ def _warmup(glctx, device=None):
     tri = tensor([[0, 1, 2]], dtype=torch.int32)
     dr.rasterize(glctx, pos, tri, resolution=[256, 256])
 
-glctx = dr.RasterizeCudaContext(device="cuda")
 
 class NormalsRenderer:
     
@@ -31,7 +30,7 @@ class NormalsRenderer:
         else:
             self._mvp = mvp
         self._image_size = image_size
-        self._glctx = glctx
+        self._glctx = dr.RasterizeCudaContext(device="cuda")
         _warmup(self._glctx, device)
 
     def render(self,
